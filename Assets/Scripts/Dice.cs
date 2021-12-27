@@ -15,8 +15,4 @@ public class Dice : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
 }
