@@ -48,8 +48,6 @@ public class Roll : MonoBehaviour
 
     IEnumerator WaitUntilStatic()
     {
-        Debug.Log("Start Waiting");
         yield return new WaitForSeconds(2.5f);
-        Debug.Log("Finished Waiting");
     }
 }
