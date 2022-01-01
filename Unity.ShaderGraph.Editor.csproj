@@ -561,8 +561,8 @@
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Data\Nodes\Input\Basic\ConstantNode.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Serialization\MultiJson.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Drawing\Views\Slots\TextureSlotControlView.cs" />
-    <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Generation\TargetResources\Structs.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Data\Graphs\Texture2DArrayShaderProperty.cs" />
+    <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Generation\TargetResources\Structs.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Drawing\Inspector\PropertyDrawers\TextPropertyDrawer.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Generation\Processors\Generator.cs" />
     <Compile Include="Library\PackageCache\com.unity.shadergraph@10.5.0\Editor\Data\Nodes\UV\ParallaxOcclusionMappingNode.cs" />
