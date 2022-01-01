@@ -11,7 +11,7 @@ public class Roll : MonoBehaviour
     List<Rigidbody> m_diceRigidbody;
     List<Dice> m_diceProperties;
     Vector3 m_throwDirection;
-    bool m_rolled;
+    public bool m_rolled;
 
     // Start is called before the first frame update
     void Start()

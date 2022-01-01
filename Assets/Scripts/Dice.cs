@@ -15,18 +15,12 @@ public class Dice : MonoBehaviour
     Vector3 m_initialPos;
     Vector3 m_initialRot;
     Rigidbody diceRigidbody;
-    
-    bool m_isStatic;
-    Vector3 tempPos;
-    float m_movementDistanceThreshold = 0.001f;
-    int m_movementFrame = 0;
 
-    Roll roll;
+    public Roll roll;
     // Start is called before the first frame update
     void Start()
     {
-        m_state = 0;    m_isStatic = false;
-        tempPos = new Vector3(0, 0, 0);
+        m_state = 0;
         diceRigidbody = GetComponent<Rigidbody>();
 
         m_initialPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
@@ -36,25 +30,14 @@ public class Dice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Keep Dice Rotating for Random Results
         if (m_state == 0)
         {
-            gameObject.transform.Rotate(0, 0, 100 * Time.deltaTime);
+            gameObject.transform.Rotate(0, 0, 120 * Time.deltaTime);
+            Debug.Log("Waiting...");
         }
 
-        if (m_state == 1) m_movementFrame++;
-        if (m_state == 1 && m_movementFrame > 2) CheckStatic();
         if (Input.GetKeyDown(KeyCode.R)) ResetDice();
-    }
-
-    void CheckStatic()
-    {
-        Vector3 tempPos = new Vector3(0, 0, 0);
-
-        if (tempPos.x == gameObject.transform.position.x && tempPos.y == gameObject.transform.position.y && tempPos.z == gameObject.transform.position.z) m_isStatic = true;
-
-        tempPos.x = gameObject.transform.position.x;
-        tempPos.y = gameObject.transform.position.y;
-        tempPos.z = gameObject.transform.position.z;
     }
 
     void ResetDice()
@@ -63,5 +46,6 @@ public class Dice : MonoBehaviour
         gameObject.transform.eulerAngles = m_initialRot;
         diceRigidbody.useGravity = false;
         m_state = 0;
+        roll.m_rolled = false;
     }
 }
