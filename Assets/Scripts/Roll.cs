@@ -9,16 +9,20 @@ public class Roll : MonoBehaviour
 
     List<Transform> m_dice;
     List<Rigidbody> m_diceRigidbody;
+    List<Dice> m_diceProperties;
     Vector3 m_throwDirection;
+    bool m_rolled;
+
     // Start is called before the first frame update
     void Start()
     {
-        m_throwDirection = new Vector3(0, 1, -1);
-        m_dice = new List<Transform>();     m_diceRigidbody = new List<Rigidbody>();
+        m_throwDirection = new Vector3(-1, 1, 0);   m_rolled = false;
+        m_dice = new List<Transform>();     m_diceRigidbody = new List<Rigidbody>();    m_diceProperties = new List<Dice>();
         for (int i = 0; i < 5; i++)
         {
             m_dice.Add(diceObj.transform.GetChild(i));
             m_diceRigidbody.Add(m_dice[i].GetComponent<Rigidbody>());
+            m_diceProperties.Add(m_dice[i].GetComponent<Dice>());
         }
     }
 
@@ -26,7 +30,7 @@ public class Roll : MonoBehaviour
     void Update()
     {
         // Left Click to Roll
-        if(Input.GetMouseButton(0)) RollDice();
+        if(Input.GetMouseButton(0) && !m_rolled) RollDice();
     }
 
     void RollDice()
@@ -35,7 +39,17 @@ public class Roll : MonoBehaviour
         for(int i = 0; i < 5; i++)
         {
             m_diceRigidbody[i].useGravity = true;
-            m_diceRigidbody[i].AddForce(m_throwDirection * .5f, m_forceMode);
+            m_diceRigidbody[i].AddForce(m_throwDirection * 12f, m_forceMode);
+            m_diceProperties[i].m_state = 1;
         }
+        m_rolled = true;        // Change this back to false after next action starts
+        StartCoroutine(WaitUntilStatic());
+    }
+
+    IEnumerator WaitUntilStatic()
+    {
+        Debug.Log("Start Waiting");
+        yield return new WaitForSeconds(2.5f);
+        Debug.Log("Finished Waiting");
     }
 }
