@@ -6,6 +6,7 @@ public class Roll : MonoBehaviour
 {
     public GameObject diceObj;
     public ForceMode m_forceMode;
+    public ScoreManager sManager;
 
     List<Transform> m_dice;
     List<Rigidbody> m_diceRigidbody;
@@ -49,5 +50,7 @@ public class Roll : MonoBehaviour
     IEnumerator WaitUntilStatic()
     {
         yield return new WaitForSeconds(2.5f);
+        Debug.Log("Wait Finished");
+        sManager.DiceStatic();
     }
 }

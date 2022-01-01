@@ -36,10 +36,10 @@ public class Dice : MonoBehaviour
             Debug.Log("Waiting...");
         }
 
-        if (Input.GetKeyDown(KeyCode.R)) ResetDice();
+        if (Input.GetKeyDown(KeyCode.R)) ResetDie();
     }
 
-    void ResetDice()
+    void ResetDie()
     {
         Vector3 randomRot = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
         gameObject.transform.position = m_initialPos;
@@ -50,5 +50,10 @@ public class Dice : MonoBehaviour
         roll.m_rolled = false;
 
         m_rotSpeed = 150f + Random.Range(0, 30f);
+    }
+
+    void ShowDie()
+    {
+
     }
 }
