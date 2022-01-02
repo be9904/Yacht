@@ -49,7 +49,8 @@ public class Dice : MonoBehaviour
 
     public void ResetDie()
     {
-        if(!m_chosen)
+        sManager.m_diceStatic = false;
+        if (!m_chosen)
         {
             Vector3 randomRot = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
             gameObject.transform.position = m_initialPos;
@@ -58,7 +59,6 @@ public class Dice : MonoBehaviour
             diceRigidbody.velocity = Vector3.zero;
             m_state = 0;
             roll.m_rolled = false;
-            sManager.m_diceStatic = false;
 
             m_rotSpeed = 150f + Random.Range(0, 30f);
         }

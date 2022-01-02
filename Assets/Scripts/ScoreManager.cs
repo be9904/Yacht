@@ -46,7 +46,7 @@ public class ScoreManager : MonoBehaviour
     {
         m_aces = false; m_deuces = false; m_threes = false; m_fours = false; m_fives = false; m_sixes = false;
         m_choice = false; m_fourofakind = false; m_fullhouse = false; m_sstraight = false; m_lstraight = false; m_yacht = false;
-        m_bonusAdded = false;
+        m_bonusAdded = false;   totalScore.text = "0";
 
         m_diceStatic = false;   m_choosingDice = false;     m_numChosen = 0;    m_numRolls = 0;     total = 0;      turns = 0;
         m_dice = new List<Transform>();     m_diceProperties = new List<Dice>();    m_diceUpclose = new List<Transform>();  m_diceChosen = new List<Transform>();   m_userScore = new List<Text>(); m_scores = new List<int>();
@@ -58,7 +58,7 @@ public class ScoreManager : MonoBehaviour
             m_diceChosen.Add(diceChosen.transform.GetChild(i));
             m_scores.Add(0);
         }
-        for (int i = 0; i < 12; i++) m_userScore.Add(scoreUI.transform.GetChild(i).GetComponent<Text>());
+        for (int i = 0; i < 12; i++) m_userScore.Add(scoreUI.transform.GetChild(i).GetChild(0).GetComponent<Text>());
     }
 
     // Update is called once per frame
@@ -380,7 +380,7 @@ public class ScoreManager : MonoBehaviour
     {
         int score = 0;  int[] repeated = new int[] { 0, 0, 0, 0, 0, 0 }; bool isTrue = false;
         for (int i = 0; i < 5; i++){ repeated[m_scores[i] - 1]++;    score += m_scores[i]; }
-        for (int i = 0; i < 5; i++){ if (repeated[i] >= 4) isTrue = true; }
+        for (int i = 0; i < 6; i++){ if (repeated[i] >= 4) isTrue = true; }
 
         if (isTrue) m_userScore[7].text = score.ToString();
         else m_userScore[7].text = "0";
@@ -392,7 +392,7 @@ public class ScoreManager : MonoBehaviour
     {
         int score = 0; int[] repeated = new int[] { 0, 0, 0, 0, 0, 0 }; bool threeNum = false; bool twoNum = false;
         for (int i = 0; i < 5; i++) { repeated[m_scores[i] - 1]++; score += m_scores[i]; }
-        for (int i = 0; i < 5; i++) 
+        for (int i = 0; i < 6; i++) 
         { 
             if (repeated[i] == 3) threeNum = true;
             if (repeated[i] == 2) twoNum = true;
@@ -408,9 +408,12 @@ public class ScoreManager : MonoBehaviour
     {
         int score = 15; int[] repeated = new int[] { 0, 0, 0, 0, 0, 0 }; bool isTrue = false;
         for (int i = 0; i < 5; i++) { repeated[m_scores[i] - 1]++; }
-        if (repeated[0] == 1 && repeated[1] == 1 && repeated[2] == 1 && repeated[3] == 1) isTrue = true;
-        if (repeated[1] == 1 && repeated[2] == 1 && repeated[3] == 1 && repeated[4] == 1) isTrue = true;
-        if (repeated[2] == 1 && repeated[3] == 1 && repeated[4] == 1 && repeated[5] == 1) isTrue = true;
+        string debug = "";
+        for (int i = 0; i < 6; i++) { debug += repeated[i].ToString() + " "; }
+        Debug.Log("REPEATED: " + debug);
+        if (repeated[0] >= 1 && repeated[1] >= 1 && repeated[2] >= 1 && repeated[3] >= 1) isTrue = true;
+        if (repeated[1] >= 1 && repeated[2] >= 1 && repeated[3] >= 1 && repeated[4] >= 1) isTrue = true;
+        if (repeated[2] >= 1 && repeated[3] >= 1 && repeated[4] >= 1 && repeated[5] >= 1) isTrue = true;
 
         if (isTrue) m_userScore[9].text = "15";
         else m_userScore[9].text = "0";
@@ -444,8 +447,6 @@ public class ScoreManager : MonoBehaviour
 
     void CheckScore()
     {
-        int total = 0; int bonus = 0;
-
         if (!m_aces) CheckAces();
         if (!m_deuces) CheckDeuces();
         if (!m_threes) CheckThrees();
@@ -458,12 +459,6 @@ public class ScoreManager : MonoBehaviour
         if (!m_sstraight) CheckSmallStraight();
         if (!m_lstraight) CheckLargeStraight();
         if (!m_yacht) CheckYacht();
-
-        /*bonus += CheckAces() + CheckDeuces() + CheckThrees() + CheckFours() + CheckFives() + CheckSixes();
-
-        if (bonus >= 63) total += 35;*/
-
-        totalScore.text = total.ToString();
     }
 
     void ClickField()
@@ -479,52 +474,40 @@ public class ScoreManager : MonoBehaviour
                 switch(hits[i].collider.gameObject.name)
                 {
                     case "Aces":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckAces();           CheckBonus();   ChooseField(0);     m_aces = true;              turns++;
+                        if (!m_aces) { total += int.Parse(m_userScore[0].text); CheckBonus(); ChooseField(0); m_aces = true; turns++; }
                         break;
                     case "Deuces":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckDeuces();         CheckBonus();   ChooseField(1);     m_deuces = true;            turns++;
+                        if (!m_deuces) { total += int.Parse(m_userScore[1].text); CheckBonus(); ChooseField(1); m_deuces = true; turns++; }
                         break;
                     case "Threes":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckThrees();         CheckBonus();   ChooseField(2);     m_threes = true;            turns++;
+                        if (!m_threes) { total += int.Parse(m_userScore[2].text); CheckBonus(); ChooseField(2); m_threes = true; turns++; }
                         break;
                     case "Fours":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckFours();          CheckBonus();   ChooseField(3);     m_fours = true;             turns++;
+                        if (!m_fours) { total += int.Parse(m_userScore[3].text); CheckBonus(); ChooseField(3); m_fours = true; turns++; }
                         break;
                     case "Fives":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckFives();          CheckBonus();   ChooseField(4);     m_fives = true;             turns++;
+                        if (!m_fives) { total += int.Parse(m_userScore[4].text); CheckBonus(); ChooseField(4); m_fives = true; turns++; }
                         break;
                     case "Sixes":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckSixes();          CheckBonus();   ChooseField(5);     m_sixes = true;             turns++;
+                        if (!m_sixes) { total += int.Parse(m_userScore[5].text); CheckBonus(); ChooseField(5); m_sixes = true; turns++; }
                         break;
                     case "Choice":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckChoice();         CheckBonus();   ChooseField(6);     m_choice = true;            turns++;
+                        if (!m_choice) { total += int.Parse(m_userScore[6].text); CheckBonus(); ChooseField(6); m_choice = true; turns++; }
                         break;
                     case "4 of a Kind":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckFourOfAKind();    CheckBonus();   ChooseField(7);     m_fourofakind = true;       turns++;
+                        if (!m_fourofakind) { total += int.Parse(m_userScore[7].text); CheckBonus(); ChooseField(7); m_fourofakind = true; turns++; }
                         break;
                     case "Full House":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckFullHouse();      CheckBonus();   ChooseField(8);     m_fullhouse = true;         turns++;
+                        if (!m_fullhouse) { total += int.Parse(m_userScore[8].text); CheckBonus(); ChooseField(8); m_fullhouse = true; turns++; }
                         break;
                     case "S. Straight":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckSmallStraight();  CheckBonus();   ChooseField(9);     m_sstraight = true;         turns++;
+                        if (!m_sstraight) { total += int.Parse(m_userScore[9].text); CheckBonus(); ChooseField(9); m_sstraight = true; turns++; }
                         break;
                     case "L. Straight":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckLargeStraight();  CheckBonus();   ChooseField(10);    m_lstraight = true;         turns++;
+                        if (!m_lstraight) { total += int.Parse(m_userScore[10].text); CheckBonus(); ChooseField(10); m_lstraight = true; turns++; }
                         break;
                     case "Yacht":
-                        Debug.Log("Chose " + hits[i].collider.gameObject.name);
-                        total += CheckYacht();          CheckBonus();   ChooseField(11);    m_yacht = true;             turns++;
+                        if (!m_yacht) { total += int.Parse(m_userScore[11].text); CheckBonus(); ChooseField(11); m_yacht = true; turns++; }
                         break;
                     default:
                         break;
@@ -582,9 +565,8 @@ public class ScoreManager : MonoBehaviour
                 }
             }
         }
-
-        string val = m_userScore[index].text;
-        total += int.Parse(val);
+        // Show Highlight
+        scoreUI.transform.GetChild(index).GetComponent<Image>().enabled = true;
     }
 
     void CheckBonus()
@@ -593,15 +575,15 @@ public class ScoreManager : MonoBehaviour
         {
             int bonus = 0;
 
-            if (m_aces) bonus += CheckAces();
-            if (m_deuces) bonus += CheckDeuces();
-            if (m_threes) bonus += CheckThrees();
-            if (m_fours) bonus += CheckFours();
-            if (m_fives) bonus += CheckFives();
-            if (m_sixes) bonus += CheckSixes();
+            if (m_aces) bonus += int.Parse(m_userScore[0].text);
+            if (m_deuces) bonus += int.Parse(m_userScore[1].text);
+            if (m_threes) bonus += int.Parse(m_userScore[2].text);
+            if (m_fours) bonus += int.Parse(m_userScore[3].text);
+            if (m_fives) bonus += int.Parse(m_userScore[4].text);
+            if (m_sixes) bonus += int.Parse(m_userScore[5].text);
 
-            if (bonus >= 63) total += 35;
-            m_bonusAdded = true;
+            if (bonus >= 63) { total += 35; m_bonusAdded = true; }
+            
         }
         NextTurn();
     }
