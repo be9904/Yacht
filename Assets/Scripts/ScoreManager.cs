@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour
     public GameObject diceUpclose;
     public GameObject diceChosen;
     public GameObject scoreUI;
+    public Text bonusScore;
     public Text totalScore;
     public Canvas rerollButton;
 
@@ -46,7 +47,7 @@ public class ScoreManager : MonoBehaviour
     {
         m_aces = false; m_deuces = false; m_threes = false; m_fours = false; m_fives = false; m_sixes = false;
         m_choice = false; m_fourofakind = false; m_fullhouse = false; m_sstraight = false; m_lstraight = false; m_yacht = false;
-        m_bonusAdded = false;   totalScore.text = "0";
+        m_bonusAdded = false;   totalScore.text = "0";  bonusScore.text = "0";
 
         m_diceStatic = false;   m_choosingDice = false;     m_numChosen = 0;    m_numRolls = 0;     total = 0;      turns = 0;
         m_dice = new List<Transform>();     m_diceProperties = new List<Dice>();    m_diceUpclose = new List<Transform>();  m_diceChosen = new List<Transform>();   m_userScore = new List<Text>(); m_scores = new List<int>();
@@ -582,7 +583,7 @@ public class ScoreManager : MonoBehaviour
             if (m_fives) bonus += int.Parse(m_userScore[4].text);
             if (m_sixes) bonus += int.Parse(m_userScore[5].text);
 
-            if (bonus >= 63) { total += 35; m_bonusAdded = true; }
+            if (bonus >= 63) { total += 35; bonusScore.text = "35"; m_bonusAdded = true; }
             
         }
         NextTurn();
