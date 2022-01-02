@@ -31,7 +31,7 @@ public class Roll : MonoBehaviour
     void Update()
     {
         // Left Click to Roll
-        if(Input.GetMouseButton(0) && !m_rolled) RollDice();
+        if(Input.GetKeyDown(KeyCode.Space) && !m_rolled) RollDice();
     }
 
     void RollDice()
@@ -39,9 +39,12 @@ public class Roll : MonoBehaviour
         Debug.Log("RollDice() Called");
         for(int i = 0; i < 5; i++)
         {
-            m_diceRigidbody[i].useGravity = true;
-            m_diceRigidbody[i].AddForce(m_throwDirection * 12f, m_forceMode);
-            m_diceProperties[i].m_state = 1;
+            if(!m_diceProperties[i].m_chosen)
+            {
+                m_diceRigidbody[i].useGravity = true;
+                m_diceRigidbody[i].AddForce(m_throwDirection * 12f, m_forceMode);
+                m_diceProperties[i].m_state = 1;
+            }
         }
         m_rolled = true;        // Change this back to false after next action starts
         StartCoroutine(WaitUntilStatic());

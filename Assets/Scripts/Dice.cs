@@ -13,17 +13,18 @@ public class Dice : MonoBehaviour
 
     // Public Properties
     public int m_state;     // 0: Waiting,    1: Rolled
-    public int m_chosen;    // 0: Not Chosen, 1: Chosen
+    public bool m_chosen;
     
     float m_rotSpeed;
     Vector3 m_initialPos;
     Rigidbody diceRigidbody;
     
     public Roll roll;
+    public ScoreManager sManager;
     // Start is called before the first frame update
     void Start()
     {
-        m_chosen = 0;   m_rotSpeed = 150f;  m_state = 0;
+        m_chosen = false;   m_rotSpeed = 150f;  m_state = 0;
         diceRigidbody = GetComponent<Rigidbody>();
 
         m_initialPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
@@ -32,6 +33,10 @@ public class Dice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Physics off if dice is chosen
+        if (m_chosen) diceRigidbody.isKinematic = true;
+        else diceRigidbody.isKinematic = false;
+
         // Keep Dice Rotating for Random Results
         if (m_state == 0)
         {
@@ -42,21 +47,21 @@ public class Dice : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R)) ResetDie();
     }
 
-    void ResetDie()
+    public void ResetDie()
     {
-        Vector3 randomRot = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-        gameObject.transform.position = m_initialPos;
-        gameObject.transform.eulerAngles = randomRot;
-        diceRigidbody.useGravity = false;
-        diceRigidbody.velocity = Vector3.zero;
-        m_state = 0;
-        roll.m_rolled = false;
+        if(!m_chosen)
+        {
+            Vector3 randomRot = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+            gameObject.transform.position = m_initialPos;
+            gameObject.transform.eulerAngles = randomRot;
+            diceRigidbody.useGravity = false;
+            diceRigidbody.velocity = Vector3.zero;
+            m_state = 0;
+            roll.m_rolled = false;
+            sManager.m_diceStatic = false;
 
-        m_rotSpeed = 150f + Random.Range(0, 30f);
-    }
-
-    void ShowDie()
-    {
-
+            m_rotSpeed = 150f + Random.Range(0, 30f);
+        }
+        
     }
 }
